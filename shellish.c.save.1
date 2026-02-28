@@ -339,38 +339,11 @@ int process_command(struct command_t *command) {
    // execvp(command->name, command->args); // exec+args+path
    // printf("-%s: %s: command not found\n", sysname, command->name);
    // exit(127);
-
-	//-------------------------------------------- my explanations ------------------------------------------------
+	//------------------------------------my explanations--------------------------------------------------
 	//we will first start by examining parse_command function to understand how it parses.
-	//I analyzed the function parse_command and it is parsing the command by blank spaces and specific
-	//characters such as |, then it is filling the struct command_t variables with the parsed data.
-	//hence, we can reach out these data by using command->name etc since it is saving there.
-	//I will be using struct args in order to implement exec function here.
-	char *path = getenv("PATH"); //getenv is a built in function
-	char *pathcopy = strdup(path);
-	if (pathcopy == NULL | path ==NULL){ //null check
-		printf("Path not found\n");
-		exit(1);
-	}
-	char *path_parts = strtok(pathcopy, ":");
-	while (path_parts != NULL){
-		//execv function basically kills the child process
-		//execv takes 2 params: path pointer and argv[] pointer (args yani)
-		//we have args, now we are trying to get the path to put in exec
-		char fullpath[1024];
-		strcpy(fullpath, path_parts);//copying in order to make a safe work
-		strcat(fullpath, "/");
-		strcat(fullpath, command->name);//I used strcat to add a string to string to create path
-		if (access(fullpath, X_OK) == 0){//the loop checks if there is an access, if yes then ends the loop
-			execv(fullpath, command->args);}//execv kills the process
-		path_parts = strtok(NULL, ":");//then we keep iterating the next string
-	}
-	free(pathcopy);
-
+	
   } else {
 	 // TODO: implement background processes here
-
-	//--------------------------------------- my explanations --------------------------------------------------
 
 	//since we have a struct that contains background for command, we will be reaching the background of a
 	// command by doing command->background because command is a pointer. If it was a normal variable instead
@@ -383,7 +356,7 @@ int process_command(struct command_t *command) {
 		//parameters are: pid is the returned process id of the child that comes from the same fork as parent
 		//NULL states a default place for the exit status
 		//last parameter indicates how to behave, and 0 means wait and block till the child process ends
-		waitpid(pid, NULL, 0);
+		waitpid(pid, NULL, 0)
 	}
 	 return SUCCESS;
   }

@@ -336,11 +336,24 @@ int process_command(struct command_t *command) {
 
     // TODO: do your own exec with path resolving using execv()
     // do so by replacing the execvp call below
-    execvp(command->name, command->args); // exec+args+path
-    printf("-%s: %s: command not found\n", sysname, command->name);
-    exit(127);
+   // execvp(command->name, command->args); // exec+args+path
+   // printf("-%s: %s: command not found\n", sysname, command->name);
+   // exit(127);
+
+	//-------------------------------------------- my explanations ------------------------------------------------
+	//we will first start by examining parse_command function to understand how it parses.
+	//I analyzed the function parse_command and it is parsing the command by blank spaces and specific
+	//characters such as |, then it is filling the struct command_t variables with the parsed data.
+	//hence, we can reach out these data by using command->name etc since it is saving there.
+	//I will be using struct args in order to implement exec function here.
+	while (command->args[0] != NULL){
+		
+	}
+
   } else {
 	 // TODO: implement background processes here
+
+	//--------------------------------------- my explanations --------------------------------------------------
 
 	//since we have a struct that contains background for command, we will be reaching the background of a
 	// command by doing command->background because command is a pointer. If it was a normal variable instead

@@ -340,9 +340,18 @@ int process_command(struct command_t *command) {
     printf("-%s: %s: command not found\n", sysname, command->name);
     exit(127);
   } else {
-    // TODO: implement background processes here
-    wait(0); // wait for child process to finish
-    return SUCCESS;
+	 // TODO: implement background processes here
+
+	//since we have a struct that contains background for command, we will be reaching the background of a
+	// command by doing command->background because command is a pointer. If it was a normal variable instead
+	// of a pointer, we would use command.background. Background is being set in parse_command code block
+	// given above, as I can see in parse_command, background is checking if there is a "&" at the end of command
+	//so we will be implementing the & command which indicates no wait.
+
+	if (command->background == true){
+	
+	}
+	 return SUCCESS;
   }
 }
 

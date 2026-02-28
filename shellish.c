@@ -348,8 +348,12 @@ int process_command(struct command_t *command) {
 	// given above, as I can see in parse_command, background is checking if there is a "&" at the end of command
 	//so we will be implementing the & command which indicates no wait.
 
-	if (command->background == true){
-	
+	if (command->background == false){
+		//we will use waitpid because we want parent to wait till a specific child process to end.
+		//parameters are: pid is the returned process id of the child that comes from the same fork as parent
+		//NULL states a default place for the exit status
+		//last parameter indicates how to behave, and 0 means wait and block till the child process ends
+		waitpid(pid, NULL, 0)
 	}
 	 return SUCCESS;
   }

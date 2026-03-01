@@ -332,6 +332,11 @@ int process_command(struct command_t *command) {
     surprise();
     return SUCCESS;
   }
+	if (command->next != NULL) {
+    // pipe for 2 commands
+    run_pipe2(command->args, command->next->args);
+    return SUCCESS;
+}
   pid_t pid = fork();
   if (pid == 0) // child
   {
@@ -498,6 +503,41 @@ int main() {
         }
 		printf("\n");
 	}
+}void run_pipe2(char **cmd1, char **cmd2) //fixing the bugs of my previus pipe function
+{
+    int pipefd[2];
+    if (pipe(pipefd) < 0) { perror("pipe"); return; }
+
+    pid_t pid1 = fork(); //forking to not kill the parent process
+    if (pid1 < 0) { perror("fork"); return; } //displaying error message
+
+    if (pid1 == 0) {
+        //child 1 implementation
+        if (dup2(pipefd[1], STDOUT_FILENO) < 0) { perror("dup2"); exit(1); }
+        close(pipefd[0]);
+        close(pipefd[1]); //closing to save memory
+
+        execvp(cmd1[0], cmd1); //killing child1 when its done
+        perror("execvp cmd1");
+        exit(1);
+    }
+
+    pid_t pid2 = fork();
+    if (pid2 < 0) { perror("fork"); return; }
+
+    if (pid2 == 0) {//same logic as the child 1 above
+        if (dup2(pipefd[0], STDIN_FILENO) < 0) { perror("dup2"); exit(1); }
+        close(pipefd[1]); //closing to save memory
+        close(pipefd[0]);
+
+        execvp(cmd2[0], cmd2); //executing the child 2 when its done
+        perror("execvp cmd2");
+        exit(1);
+    }
+    close(pipefd[0]); //closing the parent process
+    close(pipefd[1]);
+    waitpid(pid1, NULL, 0);
+    waitpid(pid2, NULL, 0);
 }
 void surprise() //custom command
 { //this command is generating a surprise number everytime we call it.
@@ -508,7 +548,7 @@ void surprise() //custom command
     }
     unsigned int number;
     if (read(FD, &number, sizeof(number)) != sizeof(number)) {
-        perror("surprise: read");
+        perror("surprise: read"); //
         close(FD);
         return;
     }

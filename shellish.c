@@ -446,6 +446,9 @@ void cut(char **args){
 	int fields[100];
 	int field_count = 0;
 	for (int i=1; args[i] != NULL; i++){
-		
+		if (strcmp(args[i], "-d") == 0) {
+            delimiter = args[i + 1][0];
+            i++;
+        }
 	}
 }

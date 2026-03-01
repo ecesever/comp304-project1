@@ -352,19 +352,19 @@ int process_command(struct command_t *command) {
 	//'-> we will use flags to distinguish them
 	if (command->redirects[0] != NULL){
 		int fd0 = open(command->redirects[0],O_RDONLY);
-		if (dup2(fd0, STDIN_FILENO) < 0) {perror("redirection error"); exit(1);};
+		if (dup2(fd0, STDIN_FILENO) < 0) {perror("redirection error"); exit(1);}
 		close(fd0);
 		
 	}
 	if (command->redirects[1] !=NULL){
 		int fd1 = open(command->redirects[1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		//in this part, AI helped me to find the appropriate syntax for the flags, it was different from fopen
-		dup2(fd1, STDOUT_FILENO);
+		if (dup2(fd1, STDOUT_FILENO) < 0) {perror("redirection error"); exit(1);}
 		close(fd1);
 	}
 	if (command->redirects[2] != NULL){
 		int fd2 = open(command->redirects[2], O_APPEND | O_CREAT | O_WRONLY, 0644);
-		dup2(fd2, STDOUT_FILENO);
+		if (dup2(fd2, STDOUT_FILENO) < 0) {perror("redirection error"); exit(1);}
 		close(fd2);
 	}
 

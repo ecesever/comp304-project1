@@ -516,8 +516,23 @@ int main() {
         if (dup2(pipefd[1], STDOUT_FILENO) < 0) { perror("dup2"); exit(1); }
         close(pipefd[0]);
         close(pipefd[1]); //closing to save memory
-
-        execvp(cmd1[0], cmd1); //killing child1 when its done
+        char *path = getenv("PATH");
+		char *pathcopy = strdup(path);
+		char *dir = strtok(pathcopy, ":");
+		while (dir != NULL) {
+		    char fullpath[1024];
+		    snprintf(fullpath, sizeof(fullpath), "%s/%s", dir, cmd1[0]);
+		    if (access(fullpath, X_OK) == 0) {
+		        execv(fullpath, cmd1);
+		        perror("execv cmd1");
+		        free(pathcopy);
+		        exit(127);
+		    }
+		    dir = strtok(NULL, ":");
+		}
+		free(pathcopy);
+		fprintf(stderr, "%s: command not found\n", cmd1[0]);
+		exit(127); //killing child1 when its done
         perror("execvp cmd1");
         exit(1);
     }
@@ -529,8 +544,23 @@ int main() {
         if (dup2(pipefd[0], STDIN_FILENO) < 0) { perror("dup2"); exit(1); }
         close(pipefd[1]); //closing to save memory
         close(pipefd[0]);
-
-        execvp(cmd2[0], cmd2); //executing the child 2 when its done
+        char *path = getenv("PATH");
+		char *pathcopy = strdup(path);
+		char *dir = strtok(pathcopy, ":");
+		while (dir != NULL) {
+		    char fullpath[1024];
+		    snprintf(fullpath, sizeof(fullpath), "%s/%s", dir, cmd2[0]);
+		    if (access(fullpath, X_OK) == 0) {
+		        execv(fullpath, cmd2);
+		        perror("execv cmd2");
+		        free(pathcopy);
+		        exit(127);
+		    }
+		    dir = strtok(NULL, ":");
+		}
+		free(pathcopy);
+		fprintf(stderr, "%s: command not found\n", cmd2[0]);
+		exit(127); //executing the child 2 when its done
         perror("execvp cmd2");
         exit(1);
     }

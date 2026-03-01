@@ -53,6 +53,11 @@ void pipe(char **command1, char **command2){
         perror("execvp cmd2"); //if execvp does not work, we give an error
         exit(1);
     }
+	close(pipefd[0]);
+    close(pipefd[1]);
+
+    waitpid(pid1, NULL, 0);
+    waitpid(pid2, NULL, 0);
 }
 void print_command(struct command_t *command) {
   int i = 0;

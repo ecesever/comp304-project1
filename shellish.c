@@ -440,8 +440,7 @@ int main() {
 
   printf("\n");
   return 0;
-}
-void cut(char **args){
+}void cut(char **args){
 	char del = '\t';
 	int fields[100];
 	int field_count = 0;
@@ -467,5 +466,14 @@ void cut(char **args){
             fields[field_count++] = num;  
             i++;
         }
+	}
+	char line[4096];
+
+    while (fgets(line, sizeof(line), stdin)) {
+
+        int col = 1;
+        int printed = 0;
+
+        char *start = line;
 	}
 }

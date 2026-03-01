@@ -475,5 +475,29 @@ int main() {
         int printed = 0;
 
         char *start = line;
+		for (int i = 0; ; i++) {
+
+            if (line[i] == delimiter || line[i] == '\n' || line[i] == '\0') {
+
+                line[i] = '\0';   // parse_command mantığı
+
+                for (int j = 0; j < field_count; j++) {
+
+                    if (col == fields[j]) {
+
+                        if (printed) printf("%c", delimiter);
+                        printf("%s", start);
+                        printed = 1;
+                    }
+                }
+
+                col++;
+                start = &line[i + 1];
+            }
+
+            if (line[i] == '\0')
+                break;
+        }
+		printf("\n");
 	}
 }

@@ -1,3 +1,4 @@
+#include <fcntl.h>
 #include <errno.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -349,7 +350,19 @@ int process_command(struct command_t *command) {
 	//if <, then redirec_index = 0. if >, then redirect_index = 1, if more than 1 >, red_index=2
 	//> means delete and recreate, >> means append
 	//'-> we will use flags to distinguish them
-	if (command->redirect)
+	if (command->redirects[0] != NULL){
+		int fd0 = open(command->redirects[0],O_RDONLY);
+		close(fd0);
+		
+	}
+	if (command->redirects[1] !=NULL){
+		int fd1 = open(command->redirects[1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		close(fd1);
+	}
+	if (command->redirects[2] != NULL){
+		int fd2 = open(command->redirects[2], O_APPEND | O_CREAT | O_WRONLY, 0644);
+		close(fd2);
+	}
 
 	//-------------------------------------------- my explanations ------------------------------------------------
 	//we will first start by examining parse_command function to understand how it parses.

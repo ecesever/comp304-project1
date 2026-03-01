@@ -521,3 +521,20 @@ int main() {
 		printf("\n");
 	}
 }
+void surprise() //custom command
+{ //this command is generating a surprise number everytime we call it.
+    int FD = open("/dev/urandom", O_RDONLY);
+    if (FD < 0) {
+        perror("surprise: open");
+        return;
+    }
+    unsigned int number;
+    if (read(FD, &number, sizeof(number)) != sizeof(number)) {
+        perror("surprise: read");
+        close(FD);
+        return;
+    }
+    close(FD);
+    number = number % 1000000;  //making sure it is in a readable interval
+    printf("🎉 Surprise number: %u\n", number);
+}

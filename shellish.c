@@ -324,7 +324,14 @@ int process_command(struct command_t *command) {
       return SUCCESS;
     }
   }
-
+  if (strcmp(command->name, "cut") == 0) {
+    cut(command->args);
+    return SUCCESS;
+  }
+  if (strcmp(command->name, "surprise") == 0) {
+    surprise();
+    return SUCCESS;
+  }
   pid_t pid = fork();
   if (pid == 0) // child
   {
@@ -507,5 +514,5 @@ void surprise() //custom command
     }
     close(FD);
     number = number % 1000000;  //making sure it is in a readable interval
-    printf("🎉 Surprise number: %u\n", number);
+    printf("Surprise number: %u\n", number);
 }

@@ -29,6 +29,20 @@ struct command_t {
  * Prints a command struct
  * @param struct command_t *
  */
+void pipe(char **command1, char **command2){
+	int pipefd[2];
+
+    if (pipe(pipefd) < 0) { perror("pipe"); return; }
+	pid_t pid1 = fork(); //forking in order to make sure the parent process doesn't die
+	if (pid1 == 0) {
+        dup2(pipefd[1], STDOUT_FILENO); // same logic as the redirection implementation
+        close(pipefd[0]);
+        close(pipefd[1]); //closing files to avoid unused memory
+        execvp(cmd1[0], cmd1);
+        perror("execvp cmd1"); //just in case error message for debugging
+        exit(1);
+    }
+}
 void print_command(struct command_t *command) {
   int i = 0;
   printf("Command: <%s>\n", command->name);

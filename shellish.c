@@ -24,7 +24,8 @@ struct command_t {
   char *redirects[3];     // in/out redirection
   struct command_t *next; // for piping
 };
-
+void cut(char **args);
+void surprise();
 /**
  * Prints a command struct
  * @param struct command_t *

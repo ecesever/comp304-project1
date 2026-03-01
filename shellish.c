@@ -449,6 +449,23 @@ void cut(char **args){
 		if (strcmp(args[i], "-d") == 0) {
             delimiter = args[i + 1][0];
             i++;
+        }else if (strcmp(args[i], "-f") == 0) {
+
+            char *p = args[i + 1];
+            int num = 0;
+
+            while (*p) {
+                if (*p >= '0' && *p <= '9') {
+                    num = num * 10 + (*p - '0');
+                }
+                else if (*p == ',') {
+                    fields[field_count++] = num;
+                    num = 0;
+                }
+                p++;
+            }
+            fields[field_count++] = num;  
+            i++;
         }
 	}
 }

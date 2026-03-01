@@ -339,6 +339,17 @@ int process_command(struct command_t *command) {
    // execvp(command->name, command->args); // exec+args+path
    // printf("-%s: %s: command not found\n", sysname, command->name);
    // exit(127);
+	
+	//-------------------------------------my explanations -----------------------------
+	//stdin is the input and stdout is the output
+	//let me save the necessary data here: FD= File Descriptor
+	//fd0=Keyboard(STDIN), fd2 (STDOUT) and fd3 (STDERR aka standard error)=terminal
+	//first I will examine the parse_command function
+	//parse_command parses the < or > operation into a variable called redirection _index
+	//if <, then redirec_index = 0. if >, then redirect_index = 1, if more than 1 >, red_index=2
+	//> means delete and recreate, >> means append
+	//'-> we will use flags to distinguish them
+	if (command->redirect)
 
 	//-------------------------------------------- my explanations ------------------------------------------------
 	//we will first start by examining parse_command function to understand how it parses.

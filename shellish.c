@@ -441,7 +441,7 @@ int main() {
   printf("\n");
   return 0;
 }void cut(char **args){
-	char del = '\t';
+	char delimiter = '\t';
 	int fields[100];
 	int field_count = 0;
 	for (int i=1; args[i] != NULL; i++){

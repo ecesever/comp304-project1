@@ -455,18 +455,16 @@ int main() {
   printf("\n");
   return 0;
 }void cut(char **args){
-	char delimiter = '\t';
-	int fields[100];
-	int field_count = 0;
-	for (int i=1; args[i] != NULL; i++){
-		if (strcmp(args[i], "-d") == 0) {
+	char delimiter = '\t';//initializing the variables
+	int fields[100]; //initializing the variables
+	int field_count = 0; //initializing the variables
+	for (int i=1; args[i] != NULL; i++){ //iterating args that was pares in the parse_command func
+		if (strcmp(args[i], "-d") == 0) { //checking if it equals -d
             delimiter = args[i + 1][0];
             i++;
-        }else if (strcmp(args[i], "-f") == 0) {
-
+        }else if (strcmp(args[i], "-f") == 0) {//checking if it equals -f
             char *p = args[i + 1];
             int num = 0;
-
             while (*p) {
                 if (*p >= '0' && *p <= '9') {
                     num = num * 10 + (*p - '0');
@@ -484,32 +482,24 @@ int main() {
 	char line[4096];
 
     while (fgets(line, sizeof(line), stdin)) {
-
-        int col = 1;
-        int printed = 0;
-
+        int col = 1; //initializing variables 
+        int printed = 0; //initializing variables
         char *start = line;
 		for (int i = 0; ; i++) {
-
-            if (line[i] == delimiter || line[i] == '\n' || line[i] == '\0') {
-
-                line[i] = '\0';   // parse_command mantığı
-
+            if (line[i] == delimiter || line[i] == '\n' || line[i] == '\0') { //starting to parse
+				//with this if condition, we check if the command is valid or not
+                line[i] = '\0';   //i used the same logic as the parse_command function that was given
                 for (int j = 0; j < field_count; j++) {
-
-                    if (col == fields[j]) {
-
+                    if (col == fields[j]) { //implementing print logic
                         if (printed) printf("%c", delimiter);
                         printf("%s", start);
-                        printed = 1;
+                        printed = 1; //printed is set to true
                     }
                 }
-
-                col++;
-                start = &line[i + 1];
+                col++; //iterating by col
+                start = &line[i + 1]; //moving the pointer
             }
-
-            if (line[i] == '\0')
+            if (line[i] == '\0') //checking if we have come to the end
                 break;
         }
 		printf("\n");
